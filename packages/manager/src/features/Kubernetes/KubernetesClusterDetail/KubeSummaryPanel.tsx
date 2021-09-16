@@ -27,6 +27,7 @@ import { pluralize } from 'src/utilities/pluralize';
 import { getTotalClusterPrice } from '../kubeUtils';
 import KubeConfigDrawer from './KubeConfigDrawer';
 import KubernetesDialog from './KubernetesDialog';
+import Chip from 'src/components/core/Chip';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -378,12 +379,21 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
 
           {setKubeconfigDisplay()}
 
-          <Grid item className={classes.tags} xs={12} lg={4}>
-            <TagsPanel
-              align="right"
-              tags={cluster.tags}
-              updateTags={handleUpdateTags}
-            />
+          <Grid
+            item
+            container
+            direction="column"
+            xs={12}
+            lg={4}
+          >
+            <Grid item> </Grid>
+            <Grid item className={classes.tags}>
+              <TagsPanel
+                align="right"
+                tags={cluster.tags}
+                updateTags={handleUpdateTags}
+              />
+            </Grid>
           </Grid>
 
           <Button
