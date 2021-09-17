@@ -114,6 +114,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'absolute',
     right: theme.spacing(),
   },
+  actionRow: {
+    justifyContent: 'flex-end',
+  },
 }));
 
 interface Props {
@@ -386,7 +389,20 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
             xs={12}
             lg={4}
           >
-            <Grid item> </Grid>
+            <Grid container item direction="row" className={classes.actionRow}>
+              <Grid item>
+                <Button
+                  buttonType="secondary"
+                  onClick={() => openDialog(cluster.id)}
+                  compact
+                >
+                  Delete Cluster
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button buttonType="primary" onClick={()=>{}}>Upgrade to HA</Button>
+              </Grid>
+            </Grid>
             <Grid item className={classes.tags}>
               <TagsPanel
                 align="right"
@@ -395,15 +411,6 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
               />
             </Grid>
           </Grid>
-
-          <Button
-            buttonType="secondary"
-            onClick={() => openDialog(cluster.id)}
-            className={classes.deleteButton}
-            compact
-          >
-            Delete Cluster
-          </Button>
         </Grid>
       </Paper>
 
