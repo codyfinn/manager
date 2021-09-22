@@ -28,6 +28,8 @@ import { getTotalClusterPrice } from '../kubeUtils';
 import KubeConfigDrawer from './KubeConfigDrawer';
 import KubernetesDialog from './KubernetesDialog';
 import Chip from 'src/components/core/Chip';
+import IconTextLink from 'src/components/IconTextLink';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -243,7 +245,7 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
         direction="column"
         justify="space-between"
         xs={12}
-        lg={4}
+        lg={3}
       >
         <Grid item>
           <Typography className={classes.label}>
@@ -296,7 +298,7 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
           alignItems="flex-start"
           className={classes.mainGridContainer}
         >
-          <Grid item container direction="row" xs={12} lg={4}>
+          <Grid item container direction="row" xs={12} lg={3}>
             <Grid item>
               <Grid
                 container
@@ -387,9 +389,19 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
             container
             direction="column"
             xs={12}
-            lg={4}
+            lg={6}
           >
             <Grid container item direction="row" className={classes.actionRow}>
+              <Grid item>
+                <IconTextLink
+                  active={true}
+                  to="https://linode.com"
+                  text="Kubernetes dashboard"
+                  SideIcon={OpenInNewIcon}
+                  title="K8s Cluster Dashboard"
+                  left={false}
+                />
+              </Grid>
               <Grid item>
                 <Button
                   buttonType="secondary"
@@ -400,7 +412,12 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
                 </Button>
               </Grid>
               <Grid item>
-                <Button buttonType="primary" onClick={()=>{}}>Upgrade to HA</Button>
+                {cluster?.type === 'lke-statndard' ? (
+                  <Chip label="HA CLUSTER" />
+                ) : (
+                  <Button buttonType="primary" onClick={()=>{}}>Upgrade to HA</Button>
+                )}
+
               </Grid>
             </Grid>
             <Grid item className={classes.tags}>
