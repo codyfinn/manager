@@ -1,15 +1,30 @@
+import { isEmpty } from 'ramda';
 import * as React from 'react';
 import AbuseTicketBanner from 'src/components/AbuseTicketBanner';
+import useDismissibleNotifications from 'src/hooks/useDismissibleNotifications';
 import useFlags from 'src/hooks/useFlags';
 import { useRegionsQuery } from 'src/queries/regions';
 import { APIMaintenanceBanner } from './APIMaintenanceBanner';
+import ComplianceBanner from './ComplianceBanner';
+import ComplianceUpdateModal from './ComplianceUpdateModal';
 import { EmailBounceNotificationSection } from './EmailBounce';
 import RegionStatusBanner from './RegionStatusBanner';
-import { isEmpty } from 'ramda';
 
 const GlobalNotifications: React.FC<{}> = () => {
   const flags = useFlags();
   const suppliedMaintenances = flags.apiMaintenance?.maintenances; // The data (ID, and sometimes the title and body) we supply regarding maintenance events in LD.
+
+  const { hasDismissedNotifications } = useDismissibleNotifications();
+
+  const _hasDismissedNotifications = React.useCallback(
+    hasDismissedNotifications,
+    []
+  );
+
+  const hasDismissedMaintenances = React.useMemo(
+    () => _hasDismissedNotifications(suppliedMaintenances ?? []),
+    [_hasDismissedNotifications, suppliedMaintenances]
+  );
 
   const regions = useRegionsQuery().data ?? [];
 
@@ -18,7 +33,9 @@ const GlobalNotifications: React.FC<{}> = () => {
       <EmailBounceNotificationSection />
       <RegionStatusBanner regions={regions} />
       <AbuseTicketBanner />
-      {!isEmpty(suppliedMaintenances) ? (
+      <ComplianceBanner />
+      <ComplianceUpdateModal />
+      {!isEmpty(suppliedMaintenances) && !hasDismissedMaintenances ? (
         <APIMaintenanceBanner suppliedMaintenances={suppliedMaintenances} />
       ) : null}
     </>
