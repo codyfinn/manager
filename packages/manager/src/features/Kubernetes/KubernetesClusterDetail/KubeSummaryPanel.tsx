@@ -30,6 +30,7 @@ import KubernetesDialog from './KubernetesDialog';
 import Chip from 'src/components/core/Chip';
 import IconTextLink from 'src/components/IconTextLink';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import useFlags from 'src/hooks/useFlags';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -164,6 +165,7 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
   const [drawerError, setDrawerError] = React.useState<string | null>(null);
   const [drawerLoading, setDrawerLoading] = React.useState<boolean>(false);
   const region = dcDisplayNames[cluster.region] || 'Unknown region';
+  const flags = useFlags();
 
   // Deletion handlers
   //
@@ -392,17 +394,24 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
             lg={6}
           >
             <Grid container item direction="row" className={classes.actionRow}>
-              <Grid item>
+              <Grid
+                item
+                lg={5}
+                xs={12}
+              >
                 <IconTextLink
                   active={true}
                   to="https://linode.com"
                   text="Kubernetes dashboard"
                   SideIcon={OpenInNewIcon}
                   title="K8s Cluster Dashboard"
-                  left={false}
                 />
               </Grid>
-              <Grid item>
+              <Grid
+                item
+                lg={3}
+                xs={12}
+              >
                 <Button
                   buttonType="secondary"
                   onClick={() => openDialog(cluster.id)}
@@ -411,7 +420,11 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
                   Delete Cluster
                 </Button>
               </Grid>
-              <Grid item>
+              <Grid
+                item
+                lg={4}
+                xs={12}
+              >
                 {cluster?.type === 'lke-statndard' ? (
                   <Chip label="HA CLUSTER" />
                 ) : (
