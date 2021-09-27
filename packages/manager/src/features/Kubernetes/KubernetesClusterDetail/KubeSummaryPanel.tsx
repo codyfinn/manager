@@ -113,12 +113,17 @@ const useStyles = makeStyles((theme: Theme) => ({
       width: '100%',
     },
   },
-  deleteButton: {
-    position: 'absolute',
-    right: theme.spacing(),
+  dashboard: {
+    '& svg': {
+      height: 14,
+      marginLeft: 4,
+    },
   },
   actionRow: {
     justifyContent: 'flex-end',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
   },
 }));
 
@@ -183,6 +188,10 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
   );
 
   const [kubeConfig, setKubeConfig] = React.useState<string>('');
+
+  const goToDashboard = () => {
+    push(`/kubernetes/clusters/${cluster.id}`);
+  };
 
   const fetchKubeConfig = () => {
     return getKubeConfig(cluster.id).then((response) => {
@@ -386,51 +395,35 @@ export const KubeSummaryPanel: React.FunctionComponent<Props> = (props) => {
 
           {setKubeconfigDisplay()}
 
-          <Grid
-            item
-            container
-            direction="column"
-            xs={12}
-            lg={6}
-          >
+          <Grid item container direction="column" xs={12} lg={6}>
             <Grid container item direction="row" className={classes.actionRow}>
-              <Grid
-                item
-                lg={5}
-                xs={12}
-              >
-                <IconTextLink
-                  active={true}
-                  to="https://linode.com"
-                  text="Kubernetes dashboard"
-                  SideIcon={OpenInNewIcon}
-                  title="K8s Cluster Dashboard"
-                />
+              <Grid item>
+                <Button
+                  buttonType="secondary"
+                  className={classes.dashboard}
+                  compact
+                  onClick={goToDashboard}
+                >
+                  Kubernetes dashboard
+                  <OpenInNewIcon />
+                </Button>
               </Grid>
-              <Grid
-                item
-                lg={3}
-                xs={12}
-              >
+              <Grid item>
                 <Button
                   buttonType="secondary"
                   onClick={() => openDialog(cluster.id)}
-                  compact
                 >
                   Delete Cluster
                 </Button>
               </Grid>
-              <Grid
-                item
-                lg={4}
-                xs={12}
-              >
+              <Grid item>
                 {cluster?.type === 'lke-statndard' ? (
                   <Chip label="HA CLUSTER" />
                 ) : (
-                  <Button buttonType="primary" onClick={()=>{}}>Upgrade to HA</Button>
+                  <Button buttonType="primary" onClick={() => {}}>
+                    Upgrade to HA
+                  </Button>
                 )}
-
               </Grid>
             </Grid>
             <Grid item className={classes.tags}>
